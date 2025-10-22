@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "target": "ES6",
+    "module": "ESNext",
+    "strict": true,
+    "jsx": "react-jsx",
+    "moduleResolution": "node",
+    "outDir": "dist",
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "types": ["@figma/plugin-typings", "react", "react-dom"],
+    "lib": ["ES2017", "DOM"]
+  },
+  "include": ["src"]
+}

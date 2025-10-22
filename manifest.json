@@ -1,0 +1,11 @@
+{
+	"name": "TokensToTailwind",
+	"id": "tokens-figma-to-tailwind-plugin",
+	"api": "1.0.0",
+	"main": "dist/main.js",
+	"ui": "public/ui.html",
+	"editorType": [
+		"figma",
+		"dev"
+	]
+}

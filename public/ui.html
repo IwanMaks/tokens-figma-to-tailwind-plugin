@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+  <body style="font-family: sans-serif; padding: 16px">
+    <h2>🎨 Figma Tokens → Tailwind</h2>
+    <p>Собери токены и экспортируй файлы.</p>
+    <button id="export" style="padding: 8px 16px">Экспортировать токены</button>
+    <div id="result" style="margin-top: 16px; white-space: pre-wrap"></div>
+    <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
+    <script>
+      document.getElementById("export").onclick = () => {
+        parent.postMessage({ pluginMessage: { type: "export-tokens" } }, "*");
+      };
+      // Получение сообщений от плагина
+      window.onmessage = async (event) => {
+        const msg = event.data.pluginMessage;
+        if (!msg) return;
+        if (msg.type === "export-files") {
+          console.log("📦 Получены файлы:", msg.files);
+          await downloadZip(msg.files);
+        }
+      };
+      // Упаковка и загрузка ZIP
+      async function downloadZip(files) {
+        const zip = new JSZip();
+        files.forEach((f) => {
+          zip.file(f.name, f.content);
+        });
+        const blob = await zip.generateAsync({ type: "blob" });
+        const link = document.createElement("a");
+        link.href = URL.createObjectURL(blob);
+        link.download = "tokens.zip";
+        link.click();
+        document.getElementById("result").textContent =
+          "✅ Экспорт завершён!\n\nФайлы сохранены в tokens.zip";
+      }
+    </script>
+  </body>
+</html>
