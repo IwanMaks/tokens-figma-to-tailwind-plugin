@@ -42,9 +42,15 @@ export const getVariablesStructured = async (): Promise<CollectionResult> => {
           continue;
         }
 
+        const valueUnit =
+          variable.scopes.includes("FONT_WEIGHT") ||
+          variableCodeName.includes("weight")
+            ? ""
+            : variableTypeMapper[variable.resolvedType];
+
         // Остальные типы — напрямую
         result[collectionKey][mode.name.toLowerCase()][variableCodeName] =
-          value.toString() + variableTypeMapper[variable.resolvedType];
+          value.toString() + valueUnit;
       }
     }
   }

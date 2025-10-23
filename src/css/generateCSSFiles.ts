@@ -6,10 +6,10 @@ export const generateCSSFiles = (
 ): FileStructure[] => {
   const files: FileStructure[] = [];
 
-  for (const [collectionName, modes] of Object.entries(collections)) {
+  for (const [collectionName, modes] of Object.entries(collections).sort()) {
     let cssContent = "";
 
-    for (const [modeName, variables] of Object.entries(modes)) {
+    for (const [modeName, variables] of Object.entries(modes).sort()) {
       // TODO: Подумать, чтобы пользователь сам выбирал корневой мод
       const selector =
         modeName === "light" || modeName === "desktop"
@@ -17,7 +17,8 @@ export const generateCSSFiles = (
           : `.${modeName}`;
       cssContent += `${selector} {\n`;
 
-      for (const [key, value] of Object.entries(variables)) {
+      for (const key of Object.keys(variables).sort()) {
+        const value = variables[key];
         cssContent += `  --${key}: ${value};\n`;
       }
 

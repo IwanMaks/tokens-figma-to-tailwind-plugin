@@ -27,7 +27,7 @@ export const getTailwindFontSize = async () => {
       [
         getVarName(vars?.fontSize),
         getVarName(vars?.lineHeight),
-        getVarName(vars?.fontStyle),
+        getVarName(vars?.fontWeight),
       ]
     );
 

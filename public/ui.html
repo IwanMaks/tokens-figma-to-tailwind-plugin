@@ -3,35 +3,63 @@
   <body style="font-family: sans-serif; padding: 16px">
     <h2>🎨 Figma Tokens → Tailwind</h2>
     <p>Собери токены и экспортируй файлы.</p>
+
     <button id="export" style="padding: 8px 16px">Экспортировать токены</button>
     <div id="result" style="margin-top: 16px; white-space: pre-wrap"></div>
+
     <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
     <script>
-      document.getElementById("export").onclick = () => {
+      const exportButton = document.getElementById("export");
+      const resultDiv = document.getElementById("result");
+
+      exportButton.onclick = () => {
+        // Меняем текст кнопки и блокируем её
+        exportButton.textContent = "Загрузка...";
+        exportButton.disabled = true;
+        resultDiv.textContent = "⏳ Экспорт токенов...";
+
         parent.postMessage({ pluginMessage: { type: "export-tokens" } }, "*");
       };
+
       // Получение сообщений от плагина
       window.onmessage = async (event) => {
         const msg = event.data.pluginMessage;
         if (!msg) return;
+
         if (msg.type === "export-files") {
-          console.log("📦 Получены файлы:", msg.files);
           await downloadZip(msg.files);
+
+          // Возвращаем кнопку в исходное состояние
+          exportButton.textContent = "Экспортировать токены";
+          exportButton.disabled = false;
         }
       };
-      // Упаковка и загрузка ZIP
+
+      function getCurrentDateTimeString() {
+        const now = new Date();
+        const year = now.getFullYear();
+        const month = String(now.getMonth() + 1).padStart(2, "0");
+        const day = String(now.getDate()).padStart(2, "0");
+        const hours = String(now.getHours()).padStart(2, "0");
+        const minutes = String(now.getMinutes()).padStart(2, "0");
+        const seconds = String(now.getSeconds()).padStart(2, "0");
+        return `${year}-${month}-${day}_${hours}-${minutes}-${seconds}`;
+      }
+
       async function downloadZip(files) {
         const zip = new JSZip();
-        files.forEach((f) => {
-          zip.file(f.name, f.content);
-        });
+        files.forEach((f) => zip.file(f.name, f.content));
+
+        const currentDate = getCurrentDateTimeString();
+        const fileName = `tokens_${currentDate}.zip`;
         const blob = await zip.generateAsync({ type: "blob" });
+
         const link = document.createElement("a");
         link.href = URL.createObjectURL(blob);
-        link.download = "tokens.zip";
+        link.download = fileName;
         link.click();
-        document.getElementById("result").textContent =
-          "✅ Экспорт завершён!\n\nФайлы сохранены в tokens.zip";
+
+        resultDiv.textContent = `✅ Экспорт завершён!\n\nФайлы сохранены в ${fileName}`;
       }
     </script>
   </body>

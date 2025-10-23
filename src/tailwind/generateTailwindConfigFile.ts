@@ -1,16 +1,18 @@
+import { sortObjectKeys } from "../shared/sortObjectKeys";
 import { FileStructure } from "../shared/types";
 
 // Генерация Tailwind конфигурации
 export const generateTailwindConfigFile = (
   theme: Record<string, any>
 ): FileStructure => {
+  const sortedTheme = sortObjectKeys(theme);
   const content = `import type { Config } from 'tailwindcss';
 
-		const config: Partial<Config["theme"]> = {
-			theme: ${JSON.stringify(theme, null, 2)},
+		const tokens: Partial<Config> = {
+			theme: ${JSON.stringify(sortedTheme, null, 2)},
 		};
 
-		export default config;
+		export default tokens;
 		`;
 
   return { name: "tailwind.config.ts", content };

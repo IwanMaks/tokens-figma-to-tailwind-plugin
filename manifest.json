@@ -1,11 +1,22 @@
 {
 	"name": "TokensToTailwind",
-	"id": "tokens-figma-to-tailwind-plugin",
+	"id": "1562769980910196645",
 	"api": "1.0.0",
 	"main": "dist/main.js",
 	"ui": "public/ui.html",
 	"editorType": [
 		"figma",
 		"dev"
+	],
+	"networkAccess": {
+		"allowedDomains": [
+			"https://cdn.jsdelivr.net"
+		],
+		"reasoning": "Плагин использует библиотеку JSZip, загружаемую с CDN jsDelivr, для упаковки данных в ZIP-архив."
+	},
+	"documentAccess": "dynamic-page",
+	"capabilities": [
+		"inspect",
+		"vscode"
 	]
 }
